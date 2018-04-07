@@ -1,8 +1,8 @@
-function [ Fbest, inds ] = ransac_best_model( array_x, array_xp,...
+function [ Fbest, inds, trials, dur ] = ransac_best_model( array_x, array_xp,...
     pts_for_model, init_p, min_correct_chance, tol )
 %RANSAC_BEST_BASIC_MODEL Summary of this function goes here
 %   Detailed explanation goes here
-
+tic;
 X = [array_x array_xp];
 n = size(X, 1);
 
@@ -39,6 +39,6 @@ end
 xbest = array_x(inds, :);
 xpbest = array_xp(inds, :);
 [Fbest,~,~] = stack_and_solve(xbest, xpbest);
-
+dur = toc;
 end
 
