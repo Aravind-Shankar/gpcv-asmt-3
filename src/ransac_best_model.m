@@ -7,7 +7,7 @@ X = [array_x array_xp];
 n = size(X, 1);
 
 p = init_p;
-min_trials = ceil( log(1-min_correct_chance) / log(1 - p^4) );
+min_trials = ceil( log(1-min_correct_chance) / log(1 - p^pts_for_model) );
 
 trials = 1;
 
@@ -16,6 +16,9 @@ while trials < min_trials
     x = Xsample(:,1:3);
     xp = Xsample(:,4:6);
     [F1,F2,F3] = stack_and_solve(x, xp);
+    if F1 == 0
+        continue
+    end
     
     [inds,nmax] = get_inliers(F1, array_x, array_xp, tol);
     if F2 ~= 0
@@ -33,7 +36,7 @@ while trials < min_trials
     
     p = nmax / n;
     trials = trials + 1;
-    min_trials = ceil( log(1-min_correct_chance) / log(1 - p^4) );
+    min_trials = ceil( log(1-min_correct_chance) / log(1 - p^pts_for_model) );
 end
 
 xbest = array_x(inds, :);

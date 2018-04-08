@@ -13,7 +13,10 @@ for i=1:n
     A(i, :) = constr_corresp(array_x(i,:), array_xp(i,:));
 end
 
-assert(rank(A) == n || rank(A) == 9, 'Rank of A is insufficient');
+% assert(rank(A) == n || rank(A) == 9, 'Rank of A is insufficient');
+if (rank(A) ~= min([n 9]))
+    return
+end
 
 if (n == 7)
     [F1,F2,F3] = eqsolve_7pt(A);
