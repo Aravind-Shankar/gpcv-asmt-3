@@ -1,4 +1,4 @@
-function [ F1, F2, F3 ] = stack_and_solve( array_x, array_xp )
+function [ F1, F2, F3, T, Tp ] = stack_and_solve( array_x, array_xp )
 %STACK_AND_SOLVE Summary of this function goes here
 %   Detailed explanation goes here
 F1 = 0; F2 = 0; F3 = 0;
@@ -8,6 +8,8 @@ n = size(array_x, 1);
 assert(n >= 7, strcat('Number of correspondences (',num2str(n),') is too low'));
 
 A = zeros(n, 9);
+[array_x,T] = pointnorm(array_x);
+[array_xp,Tp] = pointnorm(array_xp);
 
 for i=1:n
     A(i, :) = constr_corresp(array_x(i,:), array_xp(i,:));
@@ -26,6 +28,12 @@ else
     else
         F1 = eqsolve_full(A);
     end
+end
+
+F1 = Tp' * F1 * T;
+if F2 ~= 0
+    F2 = Tp' * F2 * T;
+    F3 = Tp' * F3 * T;
 end
 
 end

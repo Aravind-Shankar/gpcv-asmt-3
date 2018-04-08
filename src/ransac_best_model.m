@@ -4,6 +4,7 @@ function [ Fbest, inds, trials, dur ] = ransac_best_model( array_x, array_xp,...
 %   Detailed explanation goes here
 tic;
 X = [array_x array_xp];
+
 n = size(X, 1);
 
 p = init_p;
@@ -15,7 +16,7 @@ while trials < min_trials
     Xsample = datasample(X, pts_for_model);
     x = Xsample(:,1:3);
     xp = Xsample(:,4:6);
-    [F1,F2,F3] = stack_and_solve(x, xp);
+    [F1,F2,F3,~,~] = stack_and_solve(x, xp);
     if F1 == 0
         continue
     end
@@ -41,7 +42,7 @@ end
 
 xbest = array_x(inds, :);
 xpbest = array_xp(inds, :);
-[Fbest,~,~] = stack_and_solve(xbest, xpbest);
+[Fbest,~,~,~,~] = stack_and_solve(xbest, xpbest);
 dur = toc;
 end
 
