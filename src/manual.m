@@ -7,4 +7,7 @@ title_format = 'Img %d - %d pts to match.';
 [~,~,xp] = read_points(ip.im2, sprintf(title_format, 2, pts_for_model));
 
 [F,~,~,T,Tp] = stack_and_solve(x,xp);
-disp(F);
+% disp(F);
+
+Fgold = estimateFundamentalMatrix(x(:,1:2),xp(:,1:2),...
+    'Method','Norm8Point');
