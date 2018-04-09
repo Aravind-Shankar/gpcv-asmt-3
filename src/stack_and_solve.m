@@ -30,10 +30,10 @@ else
     end
 end
 
-F1 = Tp' * F1 * T;
+F1 = norm_mat(Tp' * F1 * T);
 if F2 ~= 0
-    F2 = Tp' * F2 * T;
-    F3 = Tp' * F3 * T;
+    F2 = norm_mat(Tp' * F2 * T);
+    F3 = norm_mat(Tp' * F3 * T);
 end
 
 end

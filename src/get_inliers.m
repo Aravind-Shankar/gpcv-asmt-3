@@ -1,9 +1,11 @@
-function [ ind, cnt ] = get_inliers( F, x, xp, tol )
+function [ ind, cnt, err ] = get_inliers( F, x, xp, tol )
 %COUNT_INLIERS Summary of this function goes here
 %   Detailed explanation goes here
 
-[ind,vals] = find(abs(diag(xp * F * x')) <= tol*min(min(abs(F))));
+all_errs = abs(diag(xp * F * x'));
+[ind,vals] = find(all_errs <= tol);
 cnt = sum(vals);
+err = sum(all_errs);
 
 end
 

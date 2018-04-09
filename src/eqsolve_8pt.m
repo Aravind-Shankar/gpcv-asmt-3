@@ -8,5 +8,10 @@ function [ F ] = eqsolve_8pt( constrs )
 f = null(constrs);
 F = reshape_f(f);
 
+% rank 2 setting
+[U,S,V] = svd(F);
+S(3,3) = 0;
+F = U*S*V';
+
 end
 

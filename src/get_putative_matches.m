@@ -13,7 +13,7 @@ mp1 = vp1(indexPairs(:,1),:);
 mp2 = vp2(indexPairs(:,2),:);
 
 assert(mp1.Count > pts_for_model, sprintf('too little matches - %d', mp1.Count));
-showMatchedFeatures(ip.im1, ip.im2, mp1, mp2);
+% showMatchedFeatures(ip.im1, ip.im2, mp1, mp2);
 
 x = [mp1.Location ones(mp1.Count, 1)];
 xp = [mp2.Location ones(mp2.Count, 1)];
