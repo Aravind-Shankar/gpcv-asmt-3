@@ -2,7 +2,10 @@ function [ outmat ] = norm_mat( inmat )
 %NORM_MAT Summary of this function goes here
 %   Detailed explanation goes here
 
-outmat = reshape_f( normc(reshape_f_mat(inmat)) );
+outmat = inmat / norm(inmat,'fro');
+if outmat(end) < 0
+    outmat = -outmat;
+end
 
 end
 

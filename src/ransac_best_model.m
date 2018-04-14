@@ -1,18 +1,15 @@
-function [ Fbest, indsbest, besterr, trials, dur ] = ransac_best_model(...
+function [ Fbest, indsbest, trials, dur ] = ransac_best_model(...
     array_x, array_xp, pts_for_model, min_correct_chance, tol )
-%RANSAC_BEST_BASIC_MODEL Summary of this function goes here
+%RANSAC_BEST_MODEL Summary of this function goes here
 %   Detailed explanation goes here
 tic;
 X = [array_x array_xp];
 
 n = size(X, 1);
 
-p = 0;
 min_trials = Inf;
-
 trials = 1;
-indsbest = []; nbest = -1;
-besterr = Inf;
+indsbest = []; nbest = 0;
 
 while trials < min_trials
     Xsample = datasample(X, pts_for_model);
@@ -32,59 +29,29 @@ while trials < min_trials
     end
     
     [m,mind] = max(c);
-    if mind == 1
-        inds = i1;
-    else
-        if mind == 2
-            inds = i2;
+    if m > nbest
+        nbest = m;
+
+        if mind == 1
+            indsbest = i1;
         else
-            inds = i3;
-        end
-    end
-    
-    if m > p*n
-        x = array_x(inds,:);
-        xp = array_xp(inds,:);
-        [F1,F2,F3,~,~] = stack_and_solve(x, xp);
-        
-        [~,~,err] = get_inliers(F1, x, xp, tol);
-        if err < besterr
-            nbest = m;
-            indsbest = inds;
-            Fbest = F1;
-            besterr = err;
-        end
-        
-        if F2 ~= 0
-            [~,~,err] = get_inliers(F2, x, xp, tol);
-            if err < besterr
-                nbest = m;
-                indsbest = inds;
-                Fbest = F2;
-                besterr = err;
-            end
-            [~,~,err] = get_inliers(F3, x, xp, tol);
-            if err < besterr
-                nbest = m;
-                indsbest = inds;
-                Fbest = F3;
-                besterr = err;
+            if mind == 2
+                indsbest = i2;
+            else
+                indsbest = i3;
             end
         end
-        
-        pnew = nbest / n;
-        if pnew > p
-            p = pnew;
-            min_trials = ceil( log(1-min_correct_chance) / log(1 - p^pts_for_model) );
-        end
+       
+        p = nbest / n;
+        min_trials = ceil( log(1-min_correct_chance) / log(1 - p^pts_for_model) );
     end
     
     trials = trials + 1;
 end
 
-% xbest = array_x(inds, :);
-% xpbest = array_xp(inds, :);
-% [Fbest,~,~,~,~] = stack_and_solve(xbest, xpbest);
+xbest = array_x(indsbest, :);
+xpbest = array_xp(indsbest, :);
+[Fbest,~,~,~,~] = stack_and_solve(xbest, xpbest);
 dur = toc;
 end
 
